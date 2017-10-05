@@ -21,19 +21,16 @@ import com.assesment.bo.TransactionBOImpl;
 import com.assesment.dao.TransactionDao;
 import com.assesment.dao.TransactionDaoImpl;
 import com.assesment.resource.TransactionResource;
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.CouchbaseCluster;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.swagger.jaxrs.config.BeanConfig;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class Assessment extends Application<AssessmentConfiguration> {
 
@@ -95,28 +92,12 @@ public class Assessment extends Application<AssessmentConfiguration> {
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		
-//		final ObjectMapper omNullSerializer = Jackson.newObjectMapper();
-//		omNullSerializer.registerModule(new AfterburnerModule());
-//		omNullSerializer.configure(
-//				DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-//		omNullSerializer
-//				.setSerializationInclusion(JsonInclude.Include.ALWAYS);
-//		omNullSerializer.configure(
-//				DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-		
-//		TransactionDaoImpl transactionDaoImpl = new TransactionDaoImpl(configuration, bucket, objectMapper);
-
 		ServiceLocatorUtilities.bind(serviceLocator, new AbstractBinder() {
-			@SuppressWarnings("rawtypes")
 			@Override
 			protected void configure() {
 				bind(configuration).named("configuration");
 				bind(objectMapper).named("jsonmapper");
 
-//				bind(omNullSerializer).named("omNullSerializer");
-				
-				//bind(transactionDaoImpl).named("transactionDao");
 				
 				bind(TransactionDaoImpl.class).named("transactionDao").to(new TypeLiteral<TransactionDao>() {
 				});

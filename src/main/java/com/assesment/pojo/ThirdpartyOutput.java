@@ -31,5 +31,10 @@ public class ThirdpartyOutput {
 	public void setSomeFields(String someFields) {
 		this.someFields = someFields;
 	}
+
+	@Override
+	public String toString() {
+		return "ThirdpartyOutput [thrirdPartyData=" + thrirdPartyData + ", someFields=" + someFields + "]";
+	}
 	
 }

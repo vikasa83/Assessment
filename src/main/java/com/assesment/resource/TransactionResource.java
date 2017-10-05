@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.assesment.AssessmentConfiguration;
 import com.assesment.bo.TransactionBO;
-import com.assesment.bo.TransactionBOImpl;
-import com.assesment.pojo.Transaction;
 import com.assesment.pojo.TransactionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,21 +33,18 @@ public class TransactionResource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransactionResource.class);
 	private ObjectMapper objectMapper;
 	private TransactionBO transactionBO;
-	private AssessmentConfiguration configuration;
 
 	@Inject
 	public TransactionResource(@Named("jsonmapper") ObjectMapper objectMapper,
-			@Named("transactionBO") TransactionBO transactionBO,
-			@Named("configuration") AssessmentConfiguration configuration) {
+			@Named("transactionBO") TransactionBO transactionBO) {
 		this.objectMapper = objectMapper;
 		this.transactionBO = transactionBO;
-		this.configuration = configuration;
 	}
 
 	@GET
 	@Path("/accountNumber/{accountNumber}/sortCode/{sortCode}")
 	@ApiOperation(value = "Find transactions of accountNumber with sortCode")
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid request"),
+	@ApiResponses(value = { 
 			@ApiResponse(code = 500, message = "Internal Server Error"),
 			@ApiResponse(code = 200, message = "Successful retrieval of transaction detail", response = TransactionResponse.class) })
 	public Response getTransactions(
@@ -58,7 +53,8 @@ public class TransactionResource {
 					throws IOException {
 
 		TransactionResponse transactionResponse = transactionBO.getTransaction(accountNumber, sortCode);
-		return Response.ok(objectMapper.writeValueAsString(transactionResponse)).build();
+		String responseText = objectMapper.writeValueAsString(transactionResponse);
+		return Response.ok(responseText).build();
 	}
 
 }

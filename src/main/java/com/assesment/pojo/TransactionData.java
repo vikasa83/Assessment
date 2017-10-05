@@ -17,5 +17,11 @@ public class TransactionData {
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
 	}
+
+	@Override
+	public String toString() {
+		return "TransactionData [transactions=" + transactions + "]";
+	}
+
 	
 }

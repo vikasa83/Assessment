@@ -2,6 +2,9 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 apply plugin: 'maven'
+apply plugin: 'jacoco'
+
+sourceCompatibility = 1.8
 
 repositories {
     maven {
@@ -25,6 +28,7 @@ dependencies {
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-all:1.10.19"
     testCompile "io.dropwizard:dropwizard-testing:0.9.1"
+    testCompile "org.easytesting:fest-assert-core:2.0M10"
 }
 
 test {
@@ -43,4 +47,42 @@ mainClassName = 'com.assesment.Assessment'
 
 run {
     args 'server','local.yml'
+}
+
+def ignoreJacoco = [
+        'com/assessment/Assessment*',
+        'com/assessment/pojo/*'
+]
+
+jacocoTestReport {
+    doFirst {
+        classDirectories = fileTree(dir: "${buildDir}/classes/main/").exclude(ignoreJacoco)
+    }
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
+
+test {
+    systemProperties 'environment': System.getProperty("environment")
+    jvmArgs '-XX:-UseSplitVerifier'
+    include '**/**'
+
+    // set heap size for the test JVM(s)
+    minHeapSize = "256m"
+    maxHeapSize = "1024m"
+
+    jacoco {
+        excludes = ignoreJacoco
+        append = false
+        destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        classDumpFile = file("$buildDir/jacoco/classpathdumps")
+    }
+}
+
+jacoco {
+    toolVersion = "0.7.8"
+    reportsDir = file("$buildDir/reports/jacoco")
 }

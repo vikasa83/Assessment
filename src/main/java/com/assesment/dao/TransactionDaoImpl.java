@@ -12,15 +12,14 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TransactionDaoImpl implements TransactionDao {
 
 	private AssessmentConfiguration configuration;
-	private final Bucket bucket;
-	private final CouchbaseCluster cluster;
-	private final ObjectMapper objectMapper;
+	private Bucket bucket;
+	private CouchbaseCluster cluster;
+	private ObjectMapper objectMapper;
 
 	@Inject
 	public TransactionDaoImpl(@Named("configuration") AssessmentConfiguration configuration,
@@ -30,12 +29,43 @@ public class TransactionDaoImpl implements TransactionDao {
 		cluster = CouchbaseCluster.create(configuration.getCouchbaseNodes());
 		bucket = cluster.openBucket(configuration.getCouchbaseBucket());
 	}
+	
+	public TransactionDaoImpl() {
+	}
+
+	public AssessmentConfiguration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(AssessmentConfiguration configuration) {
+		this.configuration = configuration;
+	}
+
+	public Bucket getBucket() {
+		return bucket;
+	}
+
+	public void setBucket(Bucket bucket) {
+		this.bucket = bucket;
+	}
+
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
+
+	public void setCluster(CouchbaseCluster cluster) {
+		this.cluster = cluster;
+	}
 
 	@Override
 	public List<Transaction> getTransaction(String accountNumber, String sortCode) throws Exception {
 		String transactionKey = "TRANSACTION_" + accountNumber;
 		JsonDocument transactionDocument = bucket.get(transactionKey);
-		if (transactionDocument != null && !transactionDocument.content().isEmpty()) {
+		if (transactionDocument != null ) {
 			JsonObject jsonObject = transactionDocument.content();
 			String jsonString = jsonObject.toString();
 			TransactionData transactionData = objectMapper.readValue(jsonString, TransactionData.class);

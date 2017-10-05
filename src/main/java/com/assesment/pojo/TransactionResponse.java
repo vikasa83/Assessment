@@ -33,5 +33,11 @@ public class TransactionResponse {
 	public void setThirdpartyOutput(ThirdpartyOutput thirdpartyOutput) {
 		this.thirdpartyOutput = thirdpartyOutput;
 	}
+
+	@Override
+	public String toString() {
+		return "TransactionResponse [transactions=" + transactions + ", thirdpartyOutput=" + thirdpartyOutput + "]";
+	}
+	
 	
 }

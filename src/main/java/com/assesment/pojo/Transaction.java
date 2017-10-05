@@ -237,5 +237,21 @@ public class Transaction {
 	public void setInterimBookedCreditDebitIndicator(String interimBookedCreditDebitIndicator) {
 		this.interimBookedCreditDebitIndicator = interimBookedCreditDebitIndicator;
 	}
+
+	@Override
+	public String toString() {
+		return "Transaction [transactionId=" + transactionId + ", permanentAccountNumber=" + permanentAccountNumber
+				+ ", transactionAmount=" + transactionAmount + ", transactionCurrencyCode=" + transactionCurrencyCode
+				+ ", creditDebitIndicator=" + creditDebitIndicator + ", transactionStatus=" + transactionStatus
+				+ ", postedDateTime=" + postedDateTime + ", bookedDateTime=" + bookedDateTime
+				+ ", transactionDescription=" + transactionDescription + ", type=" + type
+				+ ", interimBookedBalanceAmount=" + interimBookedBalanceAmount + ", InterimBookedBalanceCurrencyCode="
+				+ InterimBookedBalanceCurrencyCode + ", bankTransactionCode=" + bankTransactionCode
+				+ ", bankTransactionSubCode=" + bankTransactionSubCode + ", proprietaryTransactionCode="
+				+ proprietaryTransactionCode + ", proprietaryTransactionIssuer=" + proprietaryTransactionIssuer
+				+ ", merchantName=" + merchantName + ", merchantCategoryCode=" + merchantCategoryCode
+				+ ", interimBookedCreditDebitIndicator=" + interimBookedCreditDebitIndicator + "]";
+	}
+	
 	
 }

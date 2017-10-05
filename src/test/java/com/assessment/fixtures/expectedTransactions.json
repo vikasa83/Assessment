@@ -1,0 +1,16 @@
+{
+"transactions": [
+{
+"transactionId": "3",
+"permanentAccountNumber": "222222",
+"transactionAmount": "transactionAmount",
+"transactionCurrencyCode": "TransactionCurrencyCode",
+"creditDebitIndicator": "creditDebitIndicator",
+"transactionStatus": "transactionStatus"
+}
+],
+"thirdpartyOutput": {
+"thirdPartyData": "thirdPartyData",
+"someFields": "someFields"
+}
+}
