@@ -1,0 +1,24 @@
+couchbase.nodes:
+- http://localhost:8091
+couchbase.bucket: transactions
+couchbase.password:
+
+thirdpart.uri: http://localhost:4570/thirdparty
+
+server:
+  maxThreads: 25
+  minThreads: 10
+  maxQueuedRequests: 1000
+  idleThreadTimeout: 5s
+  applicationConnectors:
+    - type: http
+      port: 8082
+      acceptorThreads: 1
+      selectorThreads: 2
+      acceptQueueSize: 1000
+      outputBufferSize: 512KiB
+      inputBufferSize: 24KiB
+      maxBufferPoolSize: 1024KiB
+  adminConnectors:
+    - type: http  
+      port: 9082

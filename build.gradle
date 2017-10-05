@@ -1,0 +1,46 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+apply plugin: 'maven'
+
+repositories {
+    maven {
+    	url "http://repo1.maven.org/maven2"
+    }
+}
+
+allprojects {
+    project.version = '1.0'
+}
+
+dependencies {
+    compile "io.dropwizard:dropwizard-core:0.9.1"
+    compile "org.apache.commons:commons-lang3:3.3.1"
+    compile "com.couchbase.client:couchbase-client:1.4.1"
+    compile "com.couchbase.client:java-client:2.2.3"
+    compile "io.swagger:swagger-core:1.5.4"
+    compile "io.swagger:swagger-annotations:1.5.4"
+    compile "io.swagger:swagger-jaxrs:1.5.4"
+    
+    testCompile "junit:junit:4.12"
+    testCompile "org.mockito:mockito-all:1.10.19"
+    testCompile "io.dropwizard:dropwizard-testing:0.9.1"
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
+
+mainClassName = 'com.assesment.Assessment'
+
+run {
+    args 'server','local.yml'
+}
