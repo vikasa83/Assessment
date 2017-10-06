@@ -33,24 +33,12 @@ public class TransactionDaoImpl implements TransactionDao {
 	public TransactionDaoImpl() {
 	}
 
-	public AssessmentConfiguration getConfiguration() {
-		return configuration;
-	}
-
 	public void setConfiguration(AssessmentConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
-	public Bucket getBucket() {
-		return bucket;
-	}
-
 	public void setBucket(Bucket bucket) {
 		this.bucket = bucket;
-	}
-
-	public ObjectMapper getObjectMapper() {
-		return objectMapper;
 	}
 
 	public void setObjectMapper(ObjectMapper objectMapper) {

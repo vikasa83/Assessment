@@ -47,8 +47,8 @@ run {
 }
 
 def ignoreJacoco = [
-        'com/assessment/Assessment*',
-        'com/assessment/pojo/*'
+        'com/assesment/Assessment*',
+        'com/assesment/pojo/*'
 ]
 
 jacocoTestReport {
