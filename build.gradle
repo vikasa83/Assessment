@@ -7,9 +7,7 @@ apply plugin: 'jacoco'
 sourceCompatibility = 1.8
 
 repositories {
-    maven {
-    	url "http://repo1.maven.org/maven2"
-    }
+    	 mavenCentral()
 }
 
 allprojects {
@@ -19,11 +17,10 @@ allprojects {
 dependencies {
     compile "io.dropwizard:dropwizard-core:0.9.1"
     compile "org.apache.commons:commons-lang3:3.3.1"
-    compile "com.couchbase.client:couchbase-client:1.4.1"
     compile "com.couchbase.client:java-client:2.2.3"
     compile "io.swagger:swagger-core:1.5.4"
     compile "io.swagger:swagger-annotations:1.5.4"
-    compile "io.swagger:swagger-jaxrs:1.5.4"
+    compile "io.swagger:swagger-jaxrs:1.5.4", { exclude group: 'javax.ws.rs', module: 'jsr311-api' }
     
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-all:1.10.19"
