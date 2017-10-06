@@ -31,6 +31,7 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.SwaggerSerializers;
 
 public class Assessment extends Application<AssessmentConfiguration> {
 
@@ -78,7 +79,7 @@ public class Assessment extends Application<AssessmentConfiguration> {
 		swaggerConfig.setTitle("Transaction API");
 		swaggerConfig.setVersion("1.0");
 		swaggerConfig.setBasePath("/");
-		swaggerConfig.setResourcePackage("com.assessment.resources");
+		swaggerConfig.setResourcePackage("com.assesment.resource");
 		swaggerConfig.setScan(true);
 		environment.servlets().addFilter("CrossOriginFilter", CrossOriginFilter.class)
 				.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -104,7 +105,8 @@ public class Assessment extends Application<AssessmentConfiguration> {
 
 				bind(TransactionBOImpl.class).named("transactionBO").to(new TypeLiteral<TransactionBO>() {
 				});
-
+				
+				bind(SwaggerSerializers.class);
 				
 			}
 		});
