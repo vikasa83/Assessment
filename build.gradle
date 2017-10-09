@@ -35,14 +35,6 @@ test {
     systemProperties 'property': 'value'
 }
 
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
-    }
-}
-
 mainClassName = 'com.assesment.Assessment'
 
 run {
@@ -66,7 +58,6 @@ jacocoTestReport {
 }
 
 test {
-    systemProperties 'environment': System.getProperty("environment")
     jvmArgs '-XX:-UseSplitVerifier'
     include '**/**'
 
