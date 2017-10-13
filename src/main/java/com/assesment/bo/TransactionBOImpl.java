@@ -1,6 +1,5 @@
 package com.assesment.bo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,7 +36,6 @@ public class TransactionBOImpl implements TransactionBO {
 		this.transactionDao = transactionDao;
 		this.configuration = configuration;
 		client = ClientBuilder.newClient().register(JacksonFeatures.class);
-		webTarget = client.target(configuration.getUri());
 	}
 
 	public void setClient(Client client) {
@@ -61,13 +59,14 @@ public class TransactionBOImpl implements TransactionBO {
 		if (transactions != null) {
 			transactionResponse = new TransactionResponse();
 			transactionResponse.setTransactions(transactions);
-			transactionResponse.setThirdpartyOutput(getThirdPartyOutput());
+			transactionResponse.setThirdpartyOutput(getThirdPartyOutput("pathVariable","queryParam"));
 		}
 		return transactionResponse;
 	}
 
-	private ThirdpartyOutput getThirdPartyOutput() throws Exception{
+	private ThirdpartyOutput getThirdPartyOutput(String pasthVariable, String queryParam) throws Exception{
 
+		webTarget = getWebTarget(pasthVariable, queryParam);
 		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
 		Response response = invocationBuilder.get();
 		int status = response.getStatus();
@@ -90,6 +89,10 @@ public class TransactionBOImpl implements TransactionBO {
 	public boolean updateTransaction(String accountNumber, String sortCode, TransactionData transactionData) {
 		boolean isUpdated = transactionDao.updateTransaction(accountNumber, sortCode, transactionData);
 		return isUpdated;
+	}
+	
+	private WebTarget getWebTarget(String pathPara, String queryParam){
+		return webTarget = client.target(configuration.getUri()+"/"+pathPara+"?"+queryParam);
 	}
 
 }

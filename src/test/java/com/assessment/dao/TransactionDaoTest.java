@@ -1,5 +1,7 @@
 package com.assessment.dao;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +15,18 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.assesment.AssessmentConfiguration;
 import com.assesment.dao.TransactionDaoImpl;
 import com.assesment.pojo.Transaction;
+import com.assesment.pojo.TransactionData;
 import com.assessment.resource.TestConfiguration;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ch.qos.logback.core.boolex.Matcher;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.FixtureHelpers;
-
-import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionDaoTest {
@@ -96,7 +99,121 @@ public class TransactionDaoTest {
 		List<Transaction> transactions = transactionDaoImpl.getTransaction(accnum, sortCode);
 		
 		assertThat(transactions).isNull();
-		
-		
 	}
+	
+	@Test
+	public void testCreateTransaction() throws JsonProcessingException {
+		TransactionData transactionData = new TransactionData();
+		List<Transaction> transactions = new ArrayList<>();
+		Transaction transaction = new Transaction();
+		transaction.setBankTransactionCode("bankTransactionCode");
+		transactions.add(transaction);
+		transactionData.setTransactions(transactions);
+		
+		JsonObject transationJsonObject = JsonObject.fromJson(objectMapper.writeValueAsString(transactionData));
+		JsonDocument jsonDocument = JsonDocument.create("id", transationJsonObject);
+		
+		Mockito.when(bucket.insert(Mockito.anyObject())).thenReturn(jsonDocument);
+		
+		boolean isCreated = transactionDaoImpl.createTransaction(transactionData);
+		assertThat(isCreated).isTrue();
+	}
+	
+	@Test
+	public void testCreateTransactionNotCreated() throws JsonProcessingException {
+		TransactionData transactionData = new TransactionData();
+		List<Transaction> transactions = new ArrayList<>();
+		Transaction transaction = new Transaction();
+		transaction.setBankTransactionCode("bankTransactionCode");
+		transactions.add(transaction);
+		transactionData.setTransactions(transactions);
+		
+		Mockito.when(bucket.insert(Mockito.anyObject())).thenReturn(null);
+		
+		boolean isCreated = transactionDaoImpl.createTransaction(transactionData);
+		assertThat(isCreated).isFalse();
+	}
+	
+	@Test
+	public void testCreateTransactionException() throws JsonProcessingException {
+		
+		ObjectMapper objectMapper = Mockito.mock(ObjectMapper.class);
+		transactionDaoImpl.setObjectMapper(objectMapper);
+		TransactionData transactionData = new TransactionData();
+		List<Transaction> transactions = new ArrayList<>();
+		Transaction transaction = new Transaction();
+		transaction.setBankTransactionCode("bankTransactionCode");
+		transactions.add(transaction);
+		transactionData.setTransactions(transactions);
+		
+		Mockito.when(objectMapper.writeValueAsString(transactionData)).thenThrow(JsonProcessingException.class);
+		
+		boolean isCreated = transactionDaoImpl.createTransaction(transactionData);
+		assertThat(isCreated).isFalse();
+	}
+	
+	
+	@Test
+	public void testUpdateTransaction() throws JsonProcessingException {
+		String accountNumber = "12345";
+		String sortCode = "123";
+		TransactionData transactionData = new TransactionData();
+		List<Transaction> transactions = new ArrayList<>();
+		Transaction transaction = new Transaction();
+		transaction.setBankTransactionCode("bankTransactionCode");
+		transactions.add(transaction);
+		transactionData.setTransactions(transactions);
+		
+		JsonObject transationJsonObject = JsonObject.fromJson(objectMapper.writeValueAsString(transactionData));
+		JsonDocument jsonDocument = JsonDocument.create("TRANSACTION_" + accountNumber + "_" + sortCode, transationJsonObject);
+		
+		Mockito.when(bucket.replace(Mockito.anyObject())).thenReturn(jsonDocument);
+		Mockito.when(bucket.get("TRANSACTION_" + accountNumber + "_" + sortCode)).thenReturn(jsonDocument);
+		
+		boolean isUpdated = transactionDaoImpl.updateTransaction(accountNumber, sortCode, transactionData);
+		assertThat(isUpdated).isTrue();
+	}
+	
+	@Test
+	public void testUpdateTransactionNotUpdated() throws JsonProcessingException {
+		String accountNumber = "12345";
+		String sortCode = "123";
+		TransactionData transactionData = new TransactionData();
+		List<Transaction> transactions = new ArrayList<>();
+		Transaction transaction = new Transaction();
+		transaction.setBankTransactionCode("bankTransactionCode");
+		transactions.add(transaction);
+		transactionData.setTransactions(transactions);
+		
+		JsonObject transationJsonObject = JsonObject.fromJson(objectMapper.writeValueAsString(transactionData));
+		JsonDocument jsonDocument = JsonDocument.create("TRANSACTION_" + accountNumber + "_" + sortCode, transationJsonObject);
+		
+		Mockito.when(bucket.replace(Mockito.anyObject())).thenReturn(jsonDocument);
+		Mockito.when(bucket.get("TRANSACTION_" + accountNumber + "_" + sortCode)).thenReturn(null);
+		
+		boolean isUpdated = transactionDaoImpl.updateTransaction(accountNumber, sortCode, transactionData);
+		assertThat(isUpdated).isFalse();
+	}
+	
+	@Test
+	public void testUpdateTransactionNotUpdatedCase2() throws JsonProcessingException {
+		String accountNumber = "12345";
+		String sortCode = "123";
+		TransactionData transactionData = new TransactionData();
+		List<Transaction> transactions = new ArrayList<>();
+		Transaction transaction = new Transaction();
+		transaction.setBankTransactionCode("bankTransactionCode");
+		transactions.add(transaction);
+		transactionData.setTransactions(transactions);
+		
+		JsonObject transationJsonObject = JsonObject.fromJson(objectMapper.writeValueAsString(transactionData));
+		JsonDocument jsonDocument = JsonDocument.create("TRANSACTION_" + accountNumber + "_" + sortCode, transationJsonObject);
+		
+		Mockito.when(bucket.replace(Mockito.anyObject())).thenReturn(null);
+		Mockito.when(bucket.get("TRANSACTION_" + accountNumber + "_" + sortCode)).thenReturn(jsonDocument);
+		
+		boolean isUpdated = transactionDaoImpl.updateTransaction(accountNumber, sortCode, transactionData);
+		assertThat(isUpdated).isFalse();
+	}
+	
 }

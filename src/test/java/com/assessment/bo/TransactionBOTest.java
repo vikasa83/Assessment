@@ -27,6 +27,8 @@ import com.assesment.pojo.TransactionData;
 import com.assesment.pojo.TransactionResponse;
 import com.assessment.resource.TestConfiguration;
 
+import ch.qos.logback.core.boolex.Matcher;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionBOTest {
@@ -45,6 +47,7 @@ public class TransactionBOTest {
 		transactionBOImpl = new TransactionBOImpl(transactionDao, testConfiguration);
 		transactionBOImpl.setClient(client);
 		transactionBOImpl.setWebTarget(webTarget);
+		Mockito.when(client.target(Mockito.anyString())).thenReturn(webTarget);
 	}
 	
 	@Test
