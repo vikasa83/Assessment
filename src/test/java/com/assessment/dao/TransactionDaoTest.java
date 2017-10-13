@@ -2,7 +2,6 @@ package com.assessment.dao;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import com.couchbase.client.java.document.json.JsonObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.qos.logback.core.boolex.Matcher;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.FixtureHelpers;
 
@@ -72,7 +70,7 @@ public class TransactionDaoTest {
 		
 		assertThat(transactions.size()).isEqualTo(expectedTransactions.size());
 		
-		assertThat(transactions.get(0).toString()).isEqualTo(expectedTransactions.get(0).toString());
+		assertThat(transactions.get(0)).isEqualTo(expectedTransactions.get(0));
 		
 	}
 	

@@ -38,6 +38,37 @@ public class TransactionResponse {
 	public String toString() {
 		return "TransactionResponse [transactions=" + transactions + ", thirdpartyOutput=" + thirdpartyOutput + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((thirdpartyOutput == null) ? 0 : thirdpartyOutput.hashCode());
+		result = prime * result + ((transactions == null) ? 0 : transactions.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TransactionResponse other = (TransactionResponse) obj;
+		if (thirdpartyOutput == null) {
+			if (other.thirdpartyOutput != null)
+				return false;
+		} else if (!thirdpartyOutput.equals(other.thirdpartyOutput))
+			return false;
+		if (transactions == null) {
+			if (other.transactions != null)
+				return false;
+		} else if (!transactions.equals(other.transactions))
+			return false;
+		return true;
+	}
 	
 	
 }

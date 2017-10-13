@@ -252,6 +252,141 @@ public class Transaction {
 				+ ", merchantName=" + merchantName + ", merchantCategoryCode=" + merchantCategoryCode
 				+ ", interimBookedCreditDebitIndicator=" + interimBookedCreditDebitIndicator + "]";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((InterimBookedBalanceCurrencyCode == null) ? 0 : InterimBookedBalanceCurrencyCode.hashCode());
+		result = prime * result + ((bankTransactionCode == null) ? 0 : bankTransactionCode.hashCode());
+		result = prime * result + ((bankTransactionSubCode == null) ? 0 : bankTransactionSubCode.hashCode());
+		result = prime * result + ((bookedDateTime == null) ? 0 : bookedDateTime.hashCode());
+		result = prime * result + ((creditDebitIndicator == null) ? 0 : creditDebitIndicator.hashCode());
+		result = prime * result + ((interimBookedBalanceAmount == null) ? 0 : interimBookedBalanceAmount.hashCode());
+		result = prime * result
+				+ ((interimBookedCreditDebitIndicator == null) ? 0 : interimBookedCreditDebitIndicator.hashCode());
+		result = prime * result + ((merchantCategoryCode == null) ? 0 : merchantCategoryCode.hashCode());
+		result = prime * result + ((merchantName == null) ? 0 : merchantName.hashCode());
+		result = prime * result + ((permanentAccountNumber == null) ? 0 : permanentAccountNumber.hashCode());
+		result = prime * result + ((postedDateTime == null) ? 0 : postedDateTime.hashCode());
+		result = prime * result + ((proprietaryTransactionCode == null) ? 0 : proprietaryTransactionCode.hashCode());
+		result = prime * result
+				+ ((proprietaryTransactionIssuer == null) ? 0 : proprietaryTransactionIssuer.hashCode());
+		result = prime * result + ((transactionAmount == null) ? 0 : transactionAmount.hashCode());
+		result = prime * result + ((transactionCurrencyCode == null) ? 0 : transactionCurrencyCode.hashCode());
+		result = prime * result + ((transactionDescription == null) ? 0 : transactionDescription.hashCode());
+		result = prime * result + ((transactionId == null) ? 0 : transactionId.hashCode());
+		result = prime * result + ((transactionStatus == null) ? 0 : transactionStatus.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transaction other = (Transaction) obj;
+		if (InterimBookedBalanceCurrencyCode == null) {
+			if (other.InterimBookedBalanceCurrencyCode != null)
+				return false;
+		} else if (!InterimBookedBalanceCurrencyCode.equals(other.InterimBookedBalanceCurrencyCode))
+			return false;
+		if (bankTransactionCode == null) {
+			if (other.bankTransactionCode != null)
+				return false;
+		} else if (!bankTransactionCode.equals(other.bankTransactionCode))
+			return false;
+		if (bankTransactionSubCode == null) {
+			if (other.bankTransactionSubCode != null)
+				return false;
+		} else if (!bankTransactionSubCode.equals(other.bankTransactionSubCode))
+			return false;
+		if (bookedDateTime == null) {
+			if (other.bookedDateTime != null)
+				return false;
+		} else if (!bookedDateTime.equals(other.bookedDateTime))
+			return false;
+		if (creditDebitIndicator == null) {
+			if (other.creditDebitIndicator != null)
+				return false;
+		} else if (!creditDebitIndicator.equals(other.creditDebitIndicator))
+			return false;
+		if (interimBookedBalanceAmount == null) {
+			if (other.interimBookedBalanceAmount != null)
+				return false;
+		} else if (!interimBookedBalanceAmount.equals(other.interimBookedBalanceAmount))
+			return false;
+		if (interimBookedCreditDebitIndicator == null) {
+			if (other.interimBookedCreditDebitIndicator != null)
+				return false;
+		} else if (!interimBookedCreditDebitIndicator.equals(other.interimBookedCreditDebitIndicator))
+			return false;
+		if (merchantCategoryCode == null) {
+			if (other.merchantCategoryCode != null)
+				return false;
+		} else if (!merchantCategoryCode.equals(other.merchantCategoryCode))
+			return false;
+		if (merchantName == null) {
+			if (other.merchantName != null)
+				return false;
+		} else if (!merchantName.equals(other.merchantName))
+			return false;
+		if (permanentAccountNumber == null) {
+			if (other.permanentAccountNumber != null)
+				return false;
+		} else if (!permanentAccountNumber.equals(other.permanentAccountNumber))
+			return false;
+		if (postedDateTime == null) {
+			if (other.postedDateTime != null)
+				return false;
+		} else if (!postedDateTime.equals(other.postedDateTime))
+			return false;
+		if (proprietaryTransactionCode == null) {
+			if (other.proprietaryTransactionCode != null)
+				return false;
+		} else if (!proprietaryTransactionCode.equals(other.proprietaryTransactionCode))
+			return false;
+		if (proprietaryTransactionIssuer == null) {
+			if (other.proprietaryTransactionIssuer != null)
+				return false;
+		} else if (!proprietaryTransactionIssuer.equals(other.proprietaryTransactionIssuer))
+			return false;
+		if (transactionAmount == null) {
+			if (other.transactionAmount != null)
+				return false;
+		} else if (!transactionAmount.equals(other.transactionAmount))
+			return false;
+		if (transactionCurrencyCode == null) {
+			if (other.transactionCurrencyCode != null)
+				return false;
+		} else if (!transactionCurrencyCode.equals(other.transactionCurrencyCode))
+			return false;
+		if (transactionDescription == null) {
+			if (other.transactionDescription != null)
+				return false;
+		} else if (!transactionDescription.equals(other.transactionDescription))
+			return false;
+		if (transactionId == null) {
+			if (other.transactionId != null)
+				return false;
+		} else if (!transactionId.equals(other.transactionId))
+			return false;
+		if (transactionStatus == null) {
+			if (other.transactionStatus != null)
+				return false;
+		} else if (!transactionStatus.equals(other.transactionStatus))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
 	
 }

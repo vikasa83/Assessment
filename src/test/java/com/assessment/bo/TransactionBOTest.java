@@ -85,7 +85,7 @@ public class TransactionBOTest {
 		
 		TransactionResponse transactionResponse = transactionBOImpl.getTransaction(accountNumber, sortCode);
 		
-		assertThat(transactionResponse.toString()).isEqualTo(exTransactionResponse.toString());
+		assertThat(transactionResponse).isEqualTo(exTransactionResponse);
 	}
 	
 	@Test

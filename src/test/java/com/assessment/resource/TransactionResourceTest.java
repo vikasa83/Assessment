@@ -58,7 +58,7 @@ public class TransactionResourceTest {
 		Response response = resourceTarget.request().header(HttpHeaders.AUTHORIZATION, "Bearer " + "Token").get();
 
 		TransactionResponse responseText = response.readEntity(TransactionResponse.class);
-		assertThat(responseText.toString()).isEqualTo(expectedTransactionResponse.toString());
+		assertThat(responseText).isEqualTo(expectedTransactionResponse);
 		assertThat(response.getStatus()).isEqualTo(200);
 
 	}
