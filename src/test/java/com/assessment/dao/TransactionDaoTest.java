@@ -61,9 +61,9 @@ public class TransactionDaoTest {
 				"com/assessment/fixtures/couchBaseDoc.json");
 		
 		JsonObject jsonObject = JsonObject.fromJson(expectedTransactionsStr);
-		JsonDocument jsonDoc = JsonDocument.create("TRANSACTION_"+accnum, jsonObject);
+		JsonDocument jsonDoc = JsonDocument.create("TRANSACTION_"+accnum+"_"+sortCode, jsonObject);
 		
-		Mockito.when(bucket.get("TRANSACTION_"+accnum)).thenReturn(jsonDoc);
+		Mockito.when(bucket.get("TRANSACTION_"+accnum+"_"+sortCode)).thenReturn(jsonDoc);
 		
 		List<Transaction> transactions = transactionDaoImpl.getTransaction(accnum, sortCode);
 		

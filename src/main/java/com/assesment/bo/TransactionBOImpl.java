@@ -19,6 +19,7 @@ import com.assesment.AssessmentConfiguration;
 import com.assesment.dao.TransactionDao;
 import com.assesment.pojo.ThirdpartyOutput;
 import com.assesment.pojo.Transaction;
+import com.assesment.pojo.TransactionData;
 import com.assesment.pojo.TransactionResponse;
 import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 
@@ -29,7 +30,6 @@ public class TransactionBOImpl implements TransactionBO {
 	private AssessmentConfiguration configuration;
 	private Client client;
 	private WebTarget webTarget;
-	
 
 	@Inject
 	public TransactionBOImpl(@Named("transactionDao") TransactionDao transactionDao,
@@ -48,27 +48,48 @@ public class TransactionBOImpl implements TransactionBO {
 		this.webTarget = webTarget;
 	}
 
+	public TransactionResponse getTransaction(String accountNumber, String sortCode) throws Exception{
 
-	public TransactionResponse getTransaction(String accountNumber, String sortCode) {
-
-		TransactionResponse transactionResponse = new TransactionResponse();
-		List<Transaction> transactions = new ArrayList<>();
+		TransactionResponse transactionResponse = null;
+		List<Transaction> transactions = null;
 		try {
 			transactions = transactionDao.getTransaction(accountNumber, sortCode);
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("Exception occurred.. ", e.getMessage());
 		}
-		transactionResponse.setTransactions(transactions);
-		transactionResponse.setThirdpartyOutput(getThirdPartyOutput());
+
+		if (transactions != null) {
+			transactionResponse = new TransactionResponse();
+			transactionResponse.setTransactions(transactions);
+			transactionResponse.setThirdpartyOutput(getThirdPartyOutput());
+		}
 		return transactionResponse;
 	}
 
-	private ThirdpartyOutput getThirdPartyOutput() {
-		
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-        Response response = invocationBuilder.get();
-        ThirdpartyOutput thirdpartyOutput = response.readEntity(ThirdpartyOutput.class);
+	private ThirdpartyOutput getThirdPartyOutput() throws Exception{
 
-		return thirdpartyOutput;
+		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+		Response response = invocationBuilder.get();
+		int status = response.getStatus();
+		if(status == 200) {
+			ThirdpartyOutput thirdpartyOutput = response.readEntity(ThirdpartyOutput.class);
+			return thirdpartyOutput;
+		} else {
+			throw new Exception("Error in fetching 3rd party data.");
+		}
+		
 	}
+
+	@Override
+	public boolean createTransaction(TransactionData transactionData) {
+		boolean isCreated = transactionDao.createTransaction(transactionData);
+		return isCreated;
+	}
+
+	@Override
+	public boolean updateTransaction(String accountNumber, String sortCode, TransactionData transactionData) {
+		boolean isUpdated = transactionDao.updateTransaction(accountNumber, sortCode, transactionData);
+		return isUpdated;
+	}
+
 }

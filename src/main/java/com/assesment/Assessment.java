@@ -21,6 +21,8 @@ import com.assesment.bo.TransactionBOImpl;
 import com.assesment.dao.TransactionDao;
 import com.assesment.dao.TransactionDaoImpl;
 import com.assesment.resource.TransactionResource;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.CouchbaseCluster;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,21 +95,26 @@ public class Assessment extends Application<AssessmentConfiguration> {
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		
+		//final CouchbaseCluster cluster = CouchbaseCluster.create(configuration.getCouchbaseNodes());
+		
+		//final Bucket bucket = cluster.openBucket(configuration.getCouchbaseBucket());
+
 		ServiceLocatorUtilities.bind(serviceLocator, new AbstractBinder() {
 			@Override
 			protected void configure() {
 				bind(configuration).named("configuration");
 				bind(objectMapper).named("jsonmapper");
 
+			//	bind(bucket).named("bucket");
 				
 				bind(TransactionDaoImpl.class).named("transactionDao").to(new TypeLiteral<TransactionDao>() {
 				});
 
 				bind(TransactionBOImpl.class).named("transactionBO").to(new TypeLiteral<TransactionBO>() {
 				});
-				
+
 				bind(SwaggerSerializers.class);
-				
+
 			}
 		});
 	}

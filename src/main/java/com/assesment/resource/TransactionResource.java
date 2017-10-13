@@ -1,22 +1,25 @@
 package com.assesment.resource;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.assesment.AssessmentConfiguration;
 import com.assesment.bo.TransactionBO;
+import com.assesment.pojo.TransactionData;
 import com.assesment.pojo.TransactionResponse;
+import com.couchbase.client.deps.io.netty.handler.codec.http.HttpResponseStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.Api;
@@ -44,17 +47,66 @@ public class TransactionResource {
 	@GET
 	@Path("/accountNumber/{accountNumber}/sortCode/{sortCode}")
 	@ApiOperation(value = "Find transactions of accountNumber with sortCode")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 500, message = "Internal Server Error"),
-			@ApiResponse(code = 200, message = "Successful retrieval of transaction detail", response = TransactionResponse.class) })
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Internal Server Error"),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 200, message = "Successfully retrieval of transaction detail", response = TransactionResponse.class) })
 	public Response getTransactions(
 			@ApiParam(value = "Account Number  (e.g. 008315670)", required = true) @PathParam("accountNumber") String accountNumber,
 			@ApiParam(value = "Sort Code (e.g. 12345)", required = true) @PathParam("sortCode") String sortCode)
-					throws IOException {
+					throws JsonProcessingException {
 
-		TransactionResponse transactionResponse = transactionBO.getTransaction(accountNumber, sortCode);
-		String responseText = objectMapper.writeValueAsString(transactionResponse);
+		String responseText = "";
+		TransactionResponse transactionResponse;
+		try {
+			transactionResponse = transactionBO.getTransaction(accountNumber, sortCode);
+			if (transactionResponse != null) {
+				responseText = objectMapper.writeValueAsString(transactionResponse);
+			} else {
+				return Response.status(Status.NOT_FOUND).entity("Transactions not found.").build();
+			}
+
+		} catch (Exception e) {
+			LOGGER.error("Error occured..", e.getMessage());
+			return Response.status(Status.NOT_ACCEPTABLE).entity("Error Occured in getting third party response.")
+					.build();
+		}
+
 		return Response.ok(responseText).build();
+	}
+
+	@POST
+	@ApiOperation(value = "Add transaction into accountNumber with sortCode")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Internal Server Error"),
+			@ApiResponse(code = 200, message = "Successfully inserted transaction detail") })
+	public Response postTransactions(
+			@ApiParam(value = "Transaction data", required = true) TransactionData transactionData)
+					throws JsonProcessingException {
+
+		boolean isCreated = transactionBO.createTransaction(transactionData);
+		if (isCreated) {
+			return Response.ok("Transactions cretaed successfully").build();
+		}
+		return Response.status(Status.NOT_ACCEPTABLE)
+				.entity("Transactions creation is failed. Please contact administrator.").build();
+	}
+
+	@PUT
+	@Path("/accountNumber/{accountNumber}/sortCode/{sortCode}")
+	@ApiOperation(value = "Add transaction into accountNumber with sortCode")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Internal Server Error"),
+			@ApiResponse(code = 200, message = "Successfully updated transaction detail") })
+	public Response updateTransactions(
+			@ApiParam(value = "Account Number  (e.g. 008315670)", required = true) @PathParam("accountNumber") String accountNumber,
+			@ApiParam(value = "Sort Code (e.g. 12345)", required = true) @PathParam("sortCode") String sortCode,
+			@ApiParam(value = "Transaction data", required = true) TransactionData transactionData) {
+
+		boolean isUpdate = transactionBO.updateTransaction(accountNumber, sortCode, transactionData);
+		if (isUpdate) {
+			return Response.ok("Transactions updated successfully").build();
+		}
+
+		return Response.status(Status.NOT_ACCEPTABLE)
+				.entity("Transactions updation is failed. Please contact administrator.").build();
 	}
 
 }
