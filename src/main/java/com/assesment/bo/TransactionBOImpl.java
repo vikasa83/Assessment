@@ -46,7 +46,7 @@ public class TransactionBOImpl implements TransactionBO {
 		this.webTarget = webTarget;
 	}
 
-	public TransactionResponse getTransaction(String accountNumber, String sortCode) throws Exception{
+	public TransactionResponse getTransaction(String accountNumber, String sortCode) throws Exception {
 
 		TransactionResponse transactionResponse = null;
 		List<Transaction> transactions = null;
@@ -59,24 +59,24 @@ public class TransactionBOImpl implements TransactionBO {
 		if (transactions != null) {
 			transactionResponse = new TransactionResponse();
 			transactionResponse.setTransactions(transactions);
-			transactionResponse.setThirdpartyOutput(getThirdPartyOutput("pathVariable","queryParam"));
+			transactionResponse.setThirdpartyOutput(getThirdPartyOutput("pathVariable", "queryParam"));
 		}
 		return transactionResponse;
 	}
 
-	private ThirdpartyOutput getThirdPartyOutput(String pasthVariable, String queryParam) throws Exception{
+	private ThirdpartyOutput getThirdPartyOutput(String pasthVariable, String queryParam) throws Exception {
 
 		webTarget = getWebTarget(pasthVariable, queryParam);
 		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
 		Response response = invocationBuilder.get();
 		int status = response.getStatus();
-		if(status == 200) {
+		if (status == 200) {
 			ThirdpartyOutput thirdpartyOutput = response.readEntity(ThirdpartyOutput.class);
 			return thirdpartyOutput;
 		} else {
 			throw new Exception("Error in fetching 3rd party data.");
 		}
-		
+
 	}
 
 	@Override
@@ -90,9 +90,9 @@ public class TransactionBOImpl implements TransactionBO {
 		boolean isUpdated = transactionDao.updateTransaction(accountNumber, sortCode, transactionData);
 		return isUpdated;
 	}
-	
-	private WebTarget getWebTarget(String pathPara, String queryParam){
-		return webTarget = client.target(configuration.getUri()+"/"+pathPara+"?"+queryParam);
+
+	private WebTarget getWebTarget(String pathPara, String queryParam) {
+		return webTarget = client.target(configuration.getUri() + "/" + pathPara + "?" + queryParam);
 	}
 
 }
