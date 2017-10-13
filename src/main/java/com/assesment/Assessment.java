@@ -94,18 +94,12 @@ public class Assessment extends Application<AssessmentConfiguration> {
 		objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		
-		//final CouchbaseCluster cluster = CouchbaseCluster.create(configuration.getCouchbaseNodes());
-		
-		//final Bucket bucket = cluster.openBucket(configuration.getCouchbaseBucket());
 
 		ServiceLocatorUtilities.bind(serviceLocator, new AbstractBinder() {
 			@Override
 			protected void configure() {
 				bind(configuration).named("configuration");
 				bind(objectMapper).named("jsonmapper");
-
-			//	bind(bucket).named("bucket");
 				
 				bind(TransactionDaoImpl.class).named("transactionDao").to(new TypeLiteral<TransactionDao>() {
 				});
