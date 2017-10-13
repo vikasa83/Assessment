@@ -58,6 +58,7 @@ public class TransactionResource {
 			@HeaderParam(value = "Authorization") String authorization) throws JsonProcessingException {
 
 		if (!oAuthValidation(authorization)) {
+			LOGGER.error("Unautorized request.");
 			return Response.status(Status.UNAUTHORIZED).entity("Authorization required.").build();
 		}
 		String responseText = "";
@@ -66,6 +67,7 @@ public class TransactionResource {
 			transactionResponse = transactionBO.getTransaction(accountNumber, sortCode);
 			if (transactionResponse != null) {
 				responseText = objectMapper.writeValueAsString(transactionResponse);
+				LOGGER.info("Returning response.");
 			} else {
 				return Response.status(Status.NOT_FOUND).entity("Transactions not found.").build();
 			}
@@ -89,6 +91,7 @@ public class TransactionResource {
 			@HeaderParam(value = "Authorization") String authorization) throws JsonProcessingException {
 
 		if (!oAuthValidation(authorization)) {
+			LOGGER.error("Unautorized request.");
 			return Response.status(Status.UNAUTHORIZED).entity("Authorization required.").build();
 		}
 

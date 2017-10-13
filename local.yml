@@ -22,3 +22,17 @@ server:
   adminConnectors:
     - type: http  
       port: 9082
+      
+logging:
+  level: INFO
+  appenders:
+    - type: file
+      threshold: INFO
+      currentLogFilename: D:/workspace/Price/Assesment/logs/transaction-service.log
+      archivedLogFilenamePattern: D:/workspace/Price/Assesment/logs/transaction-service-%d.log.gz
+      archive: true
+      archivedFileCount: 5
+      timeZone: UTC
+      logFormat: "%-6level [%d{HH:mm:ss.SSS}] [%t] %logger{5} - %X{code} %msg %n"
+    - type: console
+      threshold: INFO
